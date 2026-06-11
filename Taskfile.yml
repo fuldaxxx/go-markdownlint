@@ -1,0 +1,96 @@
+version: "3"
+
+vars:
+  LOCALBIN: '{{.TASKFILE_DIR}}/bin'
+  GOLANGCI_LINT_VERSION: v2.11.4
+  ADDLICENSE_VERSION: latest
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  test:
+    desc: Run all tests (Go)
+    silent: true
+    cmds:
+      - task: go:test
+      - task: go:race
+
+  lint:
+    desc: Run Go lint checks (fmt + vet + golangci-lint)
+    cmds:
+      - task: go:golangci-lint
+
+  go:test:
+    desc: Run full Go test suite
+    cmds:
+      - go test ./...
+
+  go:race:
+    desc: Run race tests for all packages
+    cmds:
+      - go test -race ./...
+
+  go:fmt:check:
+    desc: Verify Go formatting
+    cmds:
+      - |
+        UNFORMATTED="$(gofmt -l .)"
+        if [ -n "${UNFORMATTED}" ]; then
+          echo "gofmt check failed; unformatted files:"
+          echo "${UNFORMATTED}"
+          exit 1
+        fi
+
+  go:vet:
+    desc: Run go vet for all packages
+    cmds:
+      - go vet ./...
+
+  go:install-tool:
+    desc: Install a versioned Go tool into LOCALBIN (internal helper)
+    internal: true
+    cmds:
+      - mkdir -p '{{.LOCALBIN}}'
+      - |
+        if [ ! -f '{{.TOOL_BIN}}-{{.TOOL_VERSION}}' ]; then
+          set -e
+          package='{{.TOOL_PKG}}@{{.TOOL_VERSION}}'
+          echo "Downloading ${package}"
+          rm -f '{{.TOOL_BIN}}' || true
+          GOBIN='{{.LOCALBIN}}' go install "${package}"
+          mv '{{.TOOL_BIN}}' '{{.TOOL_BIN}}-{{.TOOL_VERSION}}'
+        fi
+        ln -sf '{{.TOOL_BIN}}-{{.TOOL_VERSION}}' '{{.TOOL_BIN}}'
+
+  tools:golangci-lint:
+    desc: Install golangci-lint locally if necessary
+    cmds:
+      - task: go:install-tool
+        vars:
+          TOOL_BIN: '{{.LOCALBIN}}/golangci-lint'
+          TOOL_PKG: github.com/golangci/golangci-lint/v2/cmd/golangci-lint
+          TOOL_VERSION: '{{.GOLANGCI_LINT_VERSION}}'
+
+  tools:addlicense:
+    desc: Install addlicense locally if necessary
+    cmds:
+      - task: go:install-tool
+        vars:
+          TOOL_BIN: '{{.LOCALBIN}}/addlicense'
+          TOOL_PKG: github.com/google/addlicense
+          TOOL_VERSION: '{{.ADDLICENSE_VERSION}}'
+
+  license:header:
+    desc: Add license headers to all .go files
+    deps: [tools:addlicense]
+    cmds:
+      - "{{.LOCALBIN}}/addlicense -f hack/license-header.txt $(find . -type f -name '*.go' -not -path './bin/*' -not -path './build/*' -not -path './.git/*')"
+
+  go:golangci-lint:
+    desc: Run golangci-lint with repo config
+    deps: [tools:golangci-lint]
+    cmds:
+      - "{{.LOCALBIN}}/golangci-lint run --config .golangci.yaml --fix"
