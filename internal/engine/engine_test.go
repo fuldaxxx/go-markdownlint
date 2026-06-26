@@ -23,11 +23,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ldmonster/go-markdownlint/configparse"
-	"github.com/ldmonster/go-markdownlint/internal/helpers"
-	"github.com/ldmonster/go-markdownlint/internal/rule"
-	"github.com/ldmonster/go-markdownlint/internal/rules"
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/configparse"
+	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
+	"github.com/fuldaxxx/go-markdownlint/internal/rule"
+	"github.com/fuldaxxx/go-markdownlint/internal/rules"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 // --- test helpers ---------------------------------------------------------

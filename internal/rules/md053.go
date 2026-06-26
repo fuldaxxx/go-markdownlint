@@ -18,9 +18,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ldmonster/go-markdownlint/internal/helpers"
-	"github.com/ldmonster/go-markdownlint/internal/rule"
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
+	"github.com/fuldaxxx/go-markdownlint/internal/rule"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 func init() { register(&md053) }

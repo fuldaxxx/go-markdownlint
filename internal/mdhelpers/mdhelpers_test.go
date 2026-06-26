@@ -18,7 +18,7 @@ import (
 	"reflect"
 	"testing"
 
-	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
+	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
 )
 
 // parseFlat parses markdown and returns the flat token list.

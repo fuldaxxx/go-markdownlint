@@ -17,7 +17,7 @@ package fix
 import (
 	"testing"
 
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 // fi is a small constructor helper for FixInfo literals.

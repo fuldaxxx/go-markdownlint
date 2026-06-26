@@ -18,7 +18,7 @@ import (
 	"context"
 	"testing"
 
-	markdownlint "github.com/ldmonster/go-markdownlint"
+	markdownlint "github.com/fuldaxxx/go-markdownlint"
 )
 
 // lintB lints content with only the given rule enabled (boolean true).
