@@ -203,7 +203,7 @@ func (p *parser) parseListItem(list *Token, lls []lline, i int, ordered bool) in
 	prefix := &Token{
 		Type:        TypeListItemPrefix,
 		StartLine:   ln,
-		StartColumn: ll.col,
+		StartColumn: markerCol,
 		EndLine:     ln,
 		EndColumn:   ll.col + runeLen(prefixText) - 1,
 		Text:        prefixText,

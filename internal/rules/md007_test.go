@@ -37,11 +37,15 @@ func TestMD007(t *testing.T) {
 	})
 
 	t.Run("positive_start_indented_top_level", func(t *testing.T) {
-		// With start_indented, the first level must be indented by 2.
-		errs := lintFull(t, "  * a\n    * b\n",
+		// With start_indented, the first level must be indented by 2; a
+		// top-level list starting at column 1 violates this.
+		errs := lintFull(t, "* a\n  * b\n",
 			markdownlint.ConfigFromMap(map[string]interface{}{"default": false, "MD007": map[string]interface{}{"start_indented": true}}))
 		if !ruleFired(errs, "MD007") {
 			t.Fatalf("expected MD007 to fire, got %v", errs)
+		}
+		if errs[0].LineNumber != 1 {
+			t.Errorf("expected line 1, got %d", errs[0].LineNumber)
 		}
 		if errs[0].ErrorDetail != "Expected: 2; Actual: 0" {
 			t.Errorf("unexpected detail %q", errs[0].ErrorDetail)
@@ -56,12 +60,19 @@ func TestMD007(t *testing.T) {
 	})
 
 	t.Run("three_space_nesting_default", func(t *testing.T) {
-		// NOTE: MD007 does not report nested-item over-indentation with the
-		// default indent=2 (a nested item indented by 3 spaces is not flagged).
-		// This test pins the actual (no-fire) behavior.
+		// With the default indent=2, a nested item indented by 3 spaces is
+		// over-indented and MD007 reports it (matching upstream micromark
+		// column semantics where listItemPrefix.startColumn is the marker
+		// column, after the leading indentation).
 		errs := lintRule(t, "MD007", "* a\n   * b\n")
-		if ruleFired(errs, "MD007") {
-			t.Fatalf("MD007 unexpectedly fired for 3-space nesting (behavior changed): %v", errs)
+		if !ruleFired(errs, "MD007") {
+			t.Fatalf("expected MD007 to fire, got %v", errs)
+		}
+		if errs[0].LineNumber != 2 {
+			t.Errorf("expected line 2, got %d", errs[0].LineNumber)
+		}
+		if errs[0].ErrorDetail != "Expected: 2; Actual: 3" {
+			t.Errorf("unexpected detail %q", errs[0].ErrorDetail)
 		}
 	})
 }
