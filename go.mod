@@ -1,4 +1,4 @@
-module github.com/ldmonster/go-markdownlint
+module github.com/fuldaxxx/go-markdownlint
 
 go 1.16
 
