@@ -26,6 +26,25 @@ import (
 
 func init() { register(&md005) }
 
+// md005MarkerColumn returns the 1-based column of a list item's marker,
+// skipping any leading linePrefix (indentation) token. The tokenizer stores a
+// nested item's leading whitespace as a linePrefix child of the listItemPrefix,
+// so listItemPrefix.StartColumn points at the indentation start rather than the
+// marker. The list container's StartColumn, however, points at the marker, so
+// measuring indentation by the marker keeps both sides on the same reference
+// and matches upstream markdownlint (which measures from the marker).
+func md005MarkerColumn(prefix *mm.Token) int {
+	for _, c := range prefix.Children {
+		if c.Type == mm.TypeLinePrefix {
+			continue
+		}
+
+		return c.StartColumn
+	}
+
+	return prefix.StartColumn
+}
+
 var md005 = rule.Rule{
 	Names:       []string{"MD005", "list-indent"},
 	Description: "Inconsistent indentation for list items at the same level",
@@ -43,7 +62,8 @@ var md005 = rule.Rule{
 				}
 
 				lineNumber := listItemPrefix.StartLine
-				actualIndent := listItemPrefix.StartColumn - 1
+				markerColumn := md005MarkerColumn(listItemPrefix)
+				actualIndent := markerColumn - 1
 
 				rangeVal := rng(1, listItemPrefix.EndColumn-1)
 				if list.Type == mm.TypeListUnordered {
@@ -61,7 +81,7 @@ var md005 = rule.Rule{
 				} else {
 					markerLength := runeLen(strings.TrimSpace(listItemPrefix.Text))
 
-					actualEnd := listItemPrefix.StartColumn + markerLength - 1
+					actualEnd := markerColumn + markerLength - 1
 					if expectedEnd == 0 {
 						expectedEnd = actualEnd
 					}

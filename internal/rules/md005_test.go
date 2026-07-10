@@ -17,14 +17,25 @@ package rules_test
 import "testing"
 
 func TestMD005(t *testing.T) {
-	t.Run("positive_inconsistent_indent", func(t *testing.T) {
-		// Third item has 3 spaces of indent while siblings have 0.
-		errs := lintRule(t, "MD005", "* a\n* b\n   * c\n")
+	t.Run("positive_ordered_misindent", func(t *testing.T) {
+		// The middle ordered item is indented one space past its siblings.
+		errs := lintRule(t, "MD005", "1. one\n 1. two\n1. three\n")
 		if !ruleFired(errs, "MD005") {
 			t.Fatalf("expected MD005 to fire, got %v", errs)
 		}
-		if errs[0].LineNumber != 3 {
-			t.Errorf("expected line 3, got %d", errs[0].LineNumber)
+		if errs[0].LineNumber != 2 {
+			t.Errorf("expected line 2, got %d", errs[0].LineNumber)
+		}
+	})
+
+	t.Run("negative_nested_under_ordered", func(t *testing.T) {
+		// Regression: bullets aligned under an ordered item's text share a
+		// consistent indent and must not be flagged. This nested-list pattern
+		// previously produced a flood of false positives because the rule
+		// measured indentation from the list container instead of the marker.
+		errs := lintRule(t, "MD005", "1. one\n   * a\n   * b\n1. two\n")
+		if ruleFired(errs, "MD005") {
+			t.Fatalf("expected no MD005 for aligned nested bullets, got %v", errs)
 		}
 	})
 
