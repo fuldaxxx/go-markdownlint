@@ -33,6 +33,11 @@ var (
 	md051NameRe         = helpers.GetHTMLAttributeRe("name")
 	md051AnchorRe       = regexp.MustCompile(`\{(#[a-z\d]+(?:[-_][a-z\d]+)*)\}`)
 	md051LineFragmentRe = regexp.MustCompile(`^#(?:L\d+(?:C\d+)?-L\d+(?:C\d+)?|L\d+)$`)
+	// md051HTMLTagRe matches a single HTML tag; md051HTMLTagNameRe extracts its
+	// (possibly closing) tag name. Used to scan block-level (htmlFlow) HTML for
+	// id/name anchors, which this port stores outside htmlText tokens.
+	md051HTMLTagRe      = regexp.MustCompile(`<[^>]+>`)
+	md051HTMLTagNameRe  = regexp.MustCompile(`^</?([a-zA-Z][^/\s>]*)`)
 	// Removes any char that is not a letter, mark, number, connector
 	// punctuation, hyphen, or space.
 	md051FragmentStripRe = regexp.MustCompile(`[^\p{L}\p{M}\p{N}\p{Pc}\- ]`)
@@ -191,7 +196,29 @@ var md051 = rule.Rule{
 			}
 		}
 
-		// Process HTML anchors
+		// registerTagAnchor extracts an id (any tag) or name (only <a>) anchor from
+		// a single opening HTML tag and records it as a valid fragment.
+		registerTagAnchor := func(tagText string) {
+			nameMatch := md051HTMLTagNameRe.FindStringSubmatch(tagText)
+			if nameMatch == nil || strings.HasPrefix(tagText, "</") {
+				return
+			}
+
+			var anchorMatch []string
+			if m := md051IdRe.FindStringSubmatch(tagText); m != nil {
+				anchorMatch = m
+			} else if strings.ToLower(nameMatch[1]) == "a" {
+				if m := md051NameRe.FindStringSubmatch(tagText); m != nil {
+					anchorMatch = m
+				}
+			}
+
+			if len(anchorMatch) > 0 {
+				setFragment("#"+anchorMatch[1], 0)
+			}
+		}
+
+		// Process inline (htmlText) HTML anchors.
 		for _, token := range p.FilterByTypesCached([]mm.TokenType{mm.TypeHTMLText}, true) {
 			htmlTagInfo := mdhelpers.GetHTMLTagInfo(token)
 			if htmlTagInfo != nil && !htmlTagInfo.Close {
@@ -207,6 +234,17 @@ var md051 = rule.Rule{
 				if len(anchorMatch) > 0 {
 					setFragment("#"+anchorMatch[1], 0)
 				}
+			}
+		}
+
+		// Process block-level (htmlFlow) HTML anchors. This port's tokenizer
+		// classifies a line beginning with "<" as an HTML block, so anchors such
+		// as `<a id="rule-1"></a>` on their own line land in htmlFlow rather than
+		// htmlText. Scan each tag in the block so those anchors still register
+		// (matching upstream markdownlint, which sees them as inline HTML).
+		for _, token := range p.FilterByTypesCached([]mm.TokenType{mm.TypeHTMLFlow}, true) {
+			for _, tag := range md051HTMLTagRe.FindAllString(token.Text, -1) {
+				registerTagAnchor(tag)
 			}
 		}
 

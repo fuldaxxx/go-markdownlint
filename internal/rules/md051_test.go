@@ -39,4 +39,22 @@ func TestMD051(t *testing.T) {
 			t.Errorf("expected no violations for #top, got %+v", errs)
 		}
 	})
+
+	t.Run("negative_html_flow_id_anchor", func(t *testing.T) {
+		// A block-level `<a id="...">` on its own line lands in htmlFlow (this
+		// port classifies a leading "<" as an HTML block). Its id anchor must
+		// still count as a valid fragment target, matching upstream markdownlint.
+		errs := lintB(t, "MD051", "# Title\n\n[go to rule](#rule-1)\n\n<a id=\"rule-1\"></a>\n")
+		if len(errs) != 0 {
+			t.Errorf("expected no violations for htmlFlow id anchor, got %+v", errs)
+		}
+	})
+
+	t.Run("negative_html_flow_name_anchor", func(t *testing.T) {
+		// The `name` attribute is honored only on <a> tags, matching upstream.
+		errs := lintB(t, "MD051", "# Title\n\n[jump](#sec)\n\n<a name=\"sec\"></a>\n")
+		if len(errs) != 0 {
+			t.Errorf("expected no violations for htmlFlow name anchor, got %+v", errs)
+		}
+	})
 }
