@@ -19,9 +19,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ldmonster/go-markdownlint/internal/cache"
-	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/cache"
+	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 // buildParams parses md and returns a fully wired RuleParams plus the doc.

@@ -24,8 +24,8 @@ import (
 	"github.com/BurntSushi/toml"
 	"gopkg.in/yaml.v3"
 
-	"github.com/ldmonster/go-markdownlint/internal/hujson"
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/hujson"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 // Configuration is re-exported for convenience.

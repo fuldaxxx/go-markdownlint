@@ -20,7 +20,7 @@ import (
 	_ "embed"
 	"encoding/json"
 
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 //go:embed all.json

@@ -17,7 +17,7 @@ package rules_test
 import (
 	"testing"
 
-	markdownlint "github.com/ldmonster/go-markdownlint"
+	markdownlint "github.com/fuldaxxx/go-markdownlint"
 )
 
 func TestMD026(t *testing.T) {

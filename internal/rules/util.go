@@ -14,7 +14,7 @@
 
 package rules
 
-import "github.com/ldmonster/go-markdownlint/internal/types"
+import "github.com/fuldaxxx/go-markdownlint/internal/types"
 
 // rng builds a 1-based [column, length] range pointer.
 func rng(column, length int) *[2]int { return &[2]int{column, length} }

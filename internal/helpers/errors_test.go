@@ -18,7 +18,7 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 // capture returns an OnError callback and a pointer to the slice it appends to.

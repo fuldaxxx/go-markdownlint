@@ -18,7 +18,7 @@ import (
 	"context"
 	"testing"
 
-	markdownlint "github.com/ldmonster/go-markdownlint"
+	markdownlint "github.com/fuldaxxx/go-markdownlint"
 )
 
 // lintRule lints content with only the named rule enabled.

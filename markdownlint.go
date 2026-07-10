@@ -24,11 +24,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ldmonster/go-markdownlint/internal/engine"
-	"github.com/ldmonster/go-markdownlint/internal/fix"
-	"github.com/ldmonster/go-markdownlint/internal/rule"
-	"github.com/ldmonster/go-markdownlint/internal/rules"
-	"github.com/ldmonster/go-markdownlint/internal/types"
+	"github.com/fuldaxxx/go-markdownlint/internal/engine"
+	"github.com/fuldaxxx/go-markdownlint/internal/fix"
+	"github.com/fuldaxxx/go-markdownlint/internal/rule"
+	"github.com/fuldaxxx/go-markdownlint/internal/rules"
+	"github.com/fuldaxxx/go-markdownlint/internal/types"
 )
 
 // Re-exported types.

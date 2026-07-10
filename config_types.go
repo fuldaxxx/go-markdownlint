@@ -14,7 +14,7 @@
 
 package markdownlint
 
-import "github.com/ldmonster/go-markdownlint/internal/types"
+import "github.com/fuldaxxx/go-markdownlint/internal/types"
 
 // Per-rule configuration types, re-exported so callers can construct a
 // Configuration with typed struct fields (e.g. Configuration{MD013: MD013Config{...}}).

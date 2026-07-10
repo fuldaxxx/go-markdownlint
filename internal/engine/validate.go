@@ -18,7 +18,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ldmonster/go-markdownlint/internal/rule"
+	"github.com/fuldaxxx/go-markdownlint/internal/rule"
 )
 
 // validateRuleList checks custom rules for structural validity and name/tag
