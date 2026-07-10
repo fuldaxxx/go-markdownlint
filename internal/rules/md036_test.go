@@ -17,22 +17,40 @@ package rules_test
 import "testing"
 
 func TestMD036(t *testing.T) {
-	// NOTE: MD036 (emphasis used instead of a heading) is not implemented:
-	// single-line paragraphs that consist entirely of emphasized text (e.g.
-	// "**My document**") are not flagged. These tests pin the actual (no-fire)
-	// behavior; if MD036 is implemented, they will start failing and should be
-	// updated to positive assertions.
-	t.Run("bold_paragraph_not_flagged", func(t *testing.T) {
+	t.Run("bold_paragraph_flagged", func(t *testing.T) {
 		errs := lintB(t, "MD036", "**My document**\n\nLorem ipsum dolor sit amet\n")
-		if len(errs) != 0 {
-			t.Errorf("MD036 unexpectedly fired (behavior changed): %+v", errs)
+		if !firedAtB(errs, "MD036", 1) {
+			t.Errorf("expected MD036 at line 1, got %+v", errs)
 		}
 	})
 
-	t.Run("italic_paragraph_not_flagged", func(t *testing.T) {
+	t.Run("italic_paragraph_flagged", func(t *testing.T) {
 		errs := lintB(t, "MD036", "Text\n\n_Another section_\n\nMore text\n")
+		if !firedAtB(errs, "MD036", 3) {
+			t.Errorf("expected MD036 at line 3, got %+v", errs)
+		}
+	})
+
+	t.Run("trailing_punctuation_not_flagged", func(t *testing.T) {
+		// A single emphasized line ending with punctuation reads as a sentence,
+		// not a heading, so it must not be flagged.
+		errs := lintB(t, "MD036", "**Is this a heading?**\n\nBody\n")
 		if len(errs) != 0 {
-			t.Errorf("MD036 unexpectedly fired (behavior changed): %+v", errs)
+			t.Errorf("expected no violations for punctuated emphasis, got %+v", errs)
+		}
+	})
+
+	t.Run("emphasis_inside_blockquote_not_flagged", func(t *testing.T) {
+		errs := lintB(t, "MD036", "> **Quoted heading**\n>\n> text\n")
+		if len(errs) != 0 {
+			t.Errorf("expected no violations inside block quote, got %+v", errs)
+		}
+	})
+
+	t.Run("emphasis_inside_list_not_flagged", func(t *testing.T) {
+		errs := lintB(t, "MD036", "- **Item heading**\n- next\n")
+		if len(errs) != 0 {
+			t.Errorf("expected no violations inside list, got %+v", errs)
 		}
 	})
 

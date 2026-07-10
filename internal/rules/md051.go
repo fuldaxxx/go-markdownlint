@@ -120,6 +120,14 @@ func md051UnescapeStringTokenText(token *mm.Token) string {
 		false,
 	)
 
+	// This port's tokenizer stores the destination/definition text directly on
+	// the string token instead of nesting data/characterEscape children under
+	// it. Fall back to the token's own text when there are no such children;
+	// otherwise the fragment reads as empty and MD051 can never fire.
+	if len(children) == 0 {
+		return token.Text
+	}
+
 	var sb strings.Builder
 	for _, c := range children {
 		sb.WriteString(c.Text)

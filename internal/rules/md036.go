@@ -51,15 +51,19 @@ var md036 = rule.Rule{
 		var paragraphTokens []*mm.Token
 
 		for _, token := range p.FilterByTypesCached([]mm.TokenType{mm.TypeParagraph}, true) {
+			// Only flag paragraphs at the top level of the document (or embedded
+			// directly in an HTML block). Paragraphs nested in block quotes or
+			// list items are not headings-in-disguise and must be ignored.
+			//
+			// Upstream markdownlint wraps each flow paragraph in a "content"
+			// token and checks content.parent; this port's tokenizer attaches the
+			// paragraph directly to its container, so a top-level paragraph has a
+			// nil parent. Checking for the (absent) "content" wrapper here skipped
+			// every paragraph and stopped MD036 from ever firing.
 			parent := token.Parent
-			if parent == nil || parent.Type != mm.TypeContent {
-				continue
-			}
 
-			grandparent := parent.Parent
-
-			okParent := grandparent == nil ||
-				(grandparent.Type == mm.TypeHTMLFlow && grandparent.Parent == nil)
+			okParent := parent == nil ||
+				(parent.Type == mm.TypeHTMLFlow && parent.Parent == nil)
 			if !okParent {
 				continue
 			}
@@ -83,19 +87,33 @@ var md036 = rule.Rule{
 				[][]mm.TokenType{emphasisType[:1], emphasisType[1:]},
 			)
 			for _, textToken := range textTokens {
-				if len(textToken.Children) == 1 &&
-					textToken.Children[0].Type == mm.TypeData &&
-					!punctuationRe.MatchString(textToken.Text) {
-					helpers.AddErrorContext(
-						onError,
-						textToken.StartLine,
-						textToken.Text,
-						false,
-						false,
-						nil,
-						nil,
-					)
+				if len(textToken.Children) != 1 || textToken.Children[0].Type != mm.TypeData {
+					continue
 				}
+
+				// This port's tokenizer keeps the emphasis text on the child data
+				// token rather than on the emphasis-text token itself, so read the
+				// text from the child. Using textToken.Text (empty here) made the
+				// trailing-punctuation check always pass and flagged emphasized
+				// sentences like "**Done.**".
+				innerText := textToken.Text
+				if innerText == "" {
+					innerText = textToken.Children[0].Text
+				}
+
+				if punctuationRe.MatchString(innerText) {
+					continue
+				}
+
+				helpers.AddErrorContext(
+					onError,
+					textToken.StartLine,
+					innerText,
+					false,
+					false,
+					nil,
+					nil,
+				)
 			}
 		}
 	},

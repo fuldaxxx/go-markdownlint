@@ -17,15 +17,10 @@ package rules_test
 import "testing"
 
 func TestMD051(t *testing.T) {
-	// NOTE: MD051 (link fragments should be valid) is not implemented: a link
-	// fragment (e.g. [x](#nonexistent)) that does not correspond to any heading
-	// anchor or named anchor in the document is not flagged. These tests pin the
-	// actual (no-fire) behavior; if MD051 is implemented, update to positive
-	// assertions.
-	t.Run("invalid_fragment_not_flagged", func(t *testing.T) {
+	t.Run("invalid_fragment_flagged", func(t *testing.T) {
 		errs := lintB(t, "MD051", "# My Heading\n\n[link](#nonexistent)\n")
-		if len(errs) != 0 {
-			t.Errorf("MD051 unexpectedly fired (behavior changed): %+v", errs)
+		if !firedAtB(errs, "MD051", 3) {
+			t.Errorf("expected MD051 at line 3, got %+v", errs)
 		}
 	})
 
@@ -34,6 +29,14 @@ func TestMD051(t *testing.T) {
 		errs := lintB(t, "MD051", "# My Heading\n\n[link](#my-heading)\n")
 		if len(errs) != 0 {
 			t.Errorf("expected no violations for valid fragment, got %+v", errs)
+		}
+	})
+
+	t.Run("negative_top_fragment", func(t *testing.T) {
+		// "#top" is always a valid fragment.
+		errs := lintB(t, "MD051", "# My Heading\n\n[back to top](#top)\n")
+		if len(errs) != 0 {
+			t.Errorf("expected no violations for #top, got %+v", errs)
 		}
 	})
 }
