@@ -91,6 +91,18 @@ func isLazyContinuation(text string) bool {
 		!isListItem(text) && !htmlBlockRe.MatchString(text)
 }
 
+// canLazyContinue reports whether text is plain paragraph content that can be
+// part of a lazy continuation inside a list item. It is stricter than
+// isLazyContinuation: an ATX heading or a blockquote also interrupts a
+// paragraph, so neither may be lazily continued.
+func canLazyContinue(text string) bool {
+	trimmed := strings.TrimLeft(text, " ")
+
+	return isLazyContinuation(text) &&
+		!blockquoteRe.MatchString(text) &&
+		!(atxRe.MatchString(trimmed) && leadingSpaces(text) < 4)
+}
+
 func isATX(text string) bool {
 	return atxRe.MatchString(text)
 }

@@ -308,6 +308,23 @@ func (p *parser) parseListItem(list *Token, lls []lline, i int, ordered bool) in
 			continue
 		}
 
+		// Lazy continuation (CommonMark): an under-indented, non-blank line
+		// continues the item's currently-open paragraph. It applies only when
+		// the previous item line is paragraph text and the candidate line does
+		// not itself begin a new block. Without this, an unindented paragraph
+		// continuation split the list, mis-parenting later items (false MD005)
+		// and turning following bullets into literal text (false MD037).
+		if canLazyContinue(item[len(item)-1].text) && canLazyContinue(nl.text) {
+			strip := leadingSpaces(nl.text)
+			item = append(
+				item,
+				lline{idx: nl.idx, text: nl.text[strip:], col: nl.col + strip},
+			)
+			j++
+
+			continue
+		}
+
 		break
 	}
 	// Trim trailing blank lines from the item.

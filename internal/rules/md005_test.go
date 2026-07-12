@@ -52,4 +52,16 @@ func TestMD005(t *testing.T) {
 			t.Fatalf("expected no MD005, got %v", errs)
 		}
 	})
+
+	t.Run("negative_lazy_continuation", func(t *testing.T) {
+		// Regression: an unindented (lazy) paragraph continuation inside the
+		// first item must not split the list. Previously the later top-level
+		// items were re-parented under the nested list and flagged as
+		// inconsistently indented.
+		md := "- alpha\nlazy continuation of alpha\n\n  - nested one\n  - nested two\n\n- beta\n- gamma\n"
+		errs := lintRule(t, "MD005", md)
+		if ruleFired(errs, "MD005") {
+			t.Fatalf("expected no MD005 across lazy continuation, got %v", errs)
+		}
+	})
 }

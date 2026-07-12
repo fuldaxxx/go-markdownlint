@@ -37,4 +37,15 @@ func TestMD037(t *testing.T) {
 			t.Errorf("expected no violations, got %+v", errs)
 		}
 	})
+
+	t.Run("negative_bullets_after_lazy_continuation", func(t *testing.T) {
+		// Regression: a lazy continuation line inside an ordered item must not
+		// split the list. Otherwise the following bullets became paragraph text
+		// and their leading `*` markers were paired as emphasis with spaces.
+		md := "1. first item\n2. second item\nlazy continuation of second\n3. third item\n    * `a` x\n    * `b` y\n"
+		errs := lintB(t, "MD037", md)
+		if len(errs) != 0 {
+			t.Errorf("expected no MD037 for real bullets, got %+v", errs)
+		}
+	})
 }
