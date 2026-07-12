@@ -17,11 +17,11 @@ package rules
 import (
 	"strconv"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
-	"github.com/fuldaxxx/go-markdownlint/internal/mdhelpers"
-	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
-	"github.com/fuldaxxx/go-markdownlint/internal/rule"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/helpers"
+	"github.com/ldmonster/go-markdownlint/internal/mdhelpers"
+	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
+	"github.com/ldmonster/go-markdownlint/internal/rule"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 func init() { register(&md001) }

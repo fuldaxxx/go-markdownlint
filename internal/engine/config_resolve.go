@@ -17,8 +17,8 @@ package engine
 import (
 	"strings"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/rule"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/rule"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 // mapAliasToRuleNames maps every rule name/alias/tag (upper-cased) to the

@@ -20,10 +20,10 @@ package rule
 import (
 	"net/url"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/cache"
-	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
-	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/cache"
+	"github.com/ldmonster/go-markdownlint/internal/helpers"
+	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 // Rule is a lint rule descriptor.

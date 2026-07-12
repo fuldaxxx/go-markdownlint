@@ -19,7 +19,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 // TestParsersValid exercises each individual parser with valid object content.

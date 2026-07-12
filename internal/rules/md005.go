@@ -18,10 +18,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
-	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
-	"github.com/fuldaxxx/go-markdownlint/internal/rule"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/helpers"
+	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
+	"github.com/ldmonster/go-markdownlint/internal/rule"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 func init() { register(&md005) }

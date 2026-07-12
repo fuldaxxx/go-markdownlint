@@ -21,9 +21,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
-	"github.com/fuldaxxx/go-markdownlint/internal/mdhelpers"
-	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
+	"github.com/ldmonster/go-markdownlint/internal/helpers"
+	"github.com/ldmonster/go-markdownlint/internal/mdhelpers"
+	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
 )
 
 // Cache memoizes derived data for one parsed document.

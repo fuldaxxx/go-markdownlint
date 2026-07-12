@@ -18,7 +18,7 @@ import (
 	"reflect"
 	"testing"
 
-	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
+	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
 )
 
 func TestNormalizeReference(t *testing.T) {

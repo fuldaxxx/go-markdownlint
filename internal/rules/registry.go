@@ -22,7 +22,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/rule"
+	"github.com/ldmonster/go-markdownlint/internal/rule"
 )
 
 // Version is the library version.

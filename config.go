@@ -19,8 +19,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fuldaxxx/go-markdownlint/configparse"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/configparse"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 // ReadConfig reads and parses a configuration file, resolving any "extends"

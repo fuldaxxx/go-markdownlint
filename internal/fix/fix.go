@@ -19,8 +19,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/helpers"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 func normalize(fi types.FixInfo, lineNumber int) types.FixInfo {

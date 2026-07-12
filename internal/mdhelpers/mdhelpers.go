@@ -21,7 +21,7 @@ import (
 	"regexp"
 	"strings"
 
-	mm "github.com/fuldaxxx/go-markdownlint/internal/micromark"
+	mm "github.com/ldmonster/go-markdownlint/internal/micromark"
 )
 
 // NonContentTokens is the set of token types that do not contain content.

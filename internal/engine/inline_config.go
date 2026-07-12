@@ -17,10 +17,10 @@ package engine
 import (
 	"strings"
 
-	"github.com/fuldaxxx/go-markdownlint/configparse"
-	"github.com/fuldaxxx/go-markdownlint/internal/helpers"
-	"github.com/fuldaxxx/go-markdownlint/internal/rule"
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/configparse"
+	"github.com/ldmonster/go-markdownlint/internal/helpers"
+	"github.com/ldmonster/go-markdownlint/internal/rule"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 type enabledPerLineResult struct {

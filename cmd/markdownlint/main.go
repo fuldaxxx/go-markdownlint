@@ -35,9 +35,9 @@ import (
 	"path/filepath"
 	"sort"
 
-	markdownlint "github.com/fuldaxxx/go-markdownlint"
-	"github.com/fuldaxxx/go-markdownlint/configparse"
-	"github.com/fuldaxxx/go-markdownlint/styles"
+	markdownlint "github.com/ldmonster/go-markdownlint"
+	"github.com/ldmonster/go-markdownlint/configparse"
+	"github.com/ldmonster/go-markdownlint/styles"
 )
 
 func main() {

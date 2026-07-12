@@ -17,7 +17,7 @@ package helpers
 import (
 	"net/url"
 
-	"github.com/fuldaxxx/go-markdownlint/internal/types"
+	"github.com/ldmonster/go-markdownlint/internal/types"
 )
 
 // AddError reports a generic error via the onError callback.
